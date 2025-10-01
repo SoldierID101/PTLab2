@@ -19,3 +19,15 @@ def index(request):
 #        self.object = form.save()
 #        return HttpResponse(f'Спасибо за покупку, {self.object.person}!')
 
+from django.shortcuts import redirect, get_object_or_404
+
+def buy_product(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    try:
+        product.sell(1)  # покупаем 1 штуку
+    except ValueError:
+        # если товара нет
+        return HttpResponse("Товар закончился :(")
+    return redirect("index")
+
+
